@@ -1,7 +1,7 @@
 {
-  "name": "eventshuffle-backend",
+  "name": "nodejs-template",
   "version": "1.0.0",
-  "description": "Technical interview pre-assignment.",
+  "description": "A Node.js template for building RESTful APIs.",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
