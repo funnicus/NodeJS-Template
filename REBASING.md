@@ -11,7 +11,6 @@ How to implement the workflow:
 3. Use `git reword` to change commit messages, that don't conform to conventional commits.
 
 4. Use `git fixup` to fix broken commits. Each commit should represent a new working version of the application. You can create temporary commits to save your work, but try to merge all related commits to its own separate feature commit before merging.
-
    1. Follow [this](https://github.com/jesseduffield/lazygit/wiki/Interactive-Rebasing) for merging unstaged changes. In short, stage all files, navigate to your desired commit and press `A` to amend.
    2. If you want to merge two older commits, use Lazygit. Use `ctrl + j` (one down) and `ctrl + k` (one up), to move commits around. Move the desired commit on top of the other commit and then fixup them together.
 
