@@ -102,16 +102,6 @@ export const eventCreateVotesHandler: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
 
-  const event = await getEventById(Number(id));
-
-  if (!event) {
-    logger.warn(`Event ${id} not found`);
-
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: `Event ${id} not found` });
-  }
-
   const newVotes = await voteEvent(Number(id), req.body);
   const updatedEvent = await getEventById(Number(id));
 

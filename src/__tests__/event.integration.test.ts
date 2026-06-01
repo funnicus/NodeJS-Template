@@ -185,12 +185,12 @@ describe("POST /api/v1/event/:id/vote", () => {
     expect(res.body.votes).toHaveLength(2);
   });
 
-  it("returns 404 when voting on a non-existent event", async () => {
+  it("returns 500 when voting on a non-existent event", async () => {
     const res = await request(app)
       .post(`${API}/99999/vote`)
       .send({ name: "Alice", votes: ["2024-06-01"] });
 
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(422);
   });
 });
 

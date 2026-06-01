@@ -88,7 +88,7 @@ const createEvent = async (
 };
 
 const voteEvent = async (id: number, newVotes: CreateVote) => {
-  const selection = await getDb()
+  const result = await getDb()
     .insertInto("vote")
     .values(
       newVotes.votes.map((date) => ({
@@ -100,7 +100,7 @@ const voteEvent = async (id: number, newVotes: CreateVote) => {
     .returningAll()
     .execute();
 
-  return selection;
+  return result;
 };
 
 const getEventResults = async (
