@@ -18,7 +18,7 @@ The project structures follows the [Tao of Node](https://alexkondov.com/tao-of-n
 You need to have
 
 - [Docker](https://www.docker.com/)
-- [pnpm](https://pnpm.io/) (v10)
+- [pnpm](https://pnpm.io/) (v11)
 
 installed to run this application.
 
