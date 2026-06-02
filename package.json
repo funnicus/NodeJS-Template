@@ -9,6 +9,7 @@
     "dev": "NODE_ENV=development tsx watch src/index.ts",
     "typecheck": "tsc",
     "test": "vitest run && vitest run --config vitest.integration.config.ts",
+    "test:debug": "vitest run --printConsoleTrace=true --silent=false && vitest run --config vitest.integration.config.ts --printConsoleTrace=true --silent=false",
     "test:watch": "vitest",
     "test:unit": "vitest run",
     "test:integration": "vitest run --config vitest.integration.config.ts",
@@ -51,14 +52,23 @@
     "vitest": "^4.1.7"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/auto-instrumentations-node": "^0.76.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.218.0",
+    "@opentelemetry/resources": "^2.7.1",
+    "@opentelemetry/sdk-node": "^0.218.0",
+    "@opentelemetry/sdk-trace-node": "^2.7.1",
+    "@opentelemetry/semantic-conventions": "^1.41.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
     "helmet": "^8.1.0",
     "http-status-codes": "^2.3.0",
     "kysely": "^0.29.2",
     "pg": "^8.21.0",
     "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
     "zod": "^4.4.3"
   }
 }

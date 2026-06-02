@@ -1,6 +1,5 @@
 import type { RequestHandler, Router } from "express";
 import express from "express";
-import { validateData } from "../middleware.ts";
 import { eventCreationSchema, voteCreationSchema } from "./event-schema.ts";
 import type {
   CreateEvent,
@@ -20,6 +19,9 @@ import {
   getEventResults,
 } from "./event-service.ts";
 import { StatusCodes } from "http-status-codes";
+import { validateData } from "../middleware/validate-data.ts";
+import { ApiError } from "../errors.ts";
+import { SpanStatusCode, trace } from "@opentelemetry/api";
 import { logger } from "../logger.ts";
 
 /**
@@ -60,18 +62,24 @@ export const eventGetHandler: RequestHandler<
   { id: string },
   ShowEventResponse | ErrorResponse
 > = async (req, res) => {
+  const span = trace.getActiveSpan();
   const { id } = req.params;
+
+  span?.setAttribute("event.id", id);
 
   const event = await getEventById(Number(id));
 
   if (!event) {
-    logger.warn(`Event ${id} not found`);
-
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: `Event ${id} not found` });
+    throw ApiError.notFound({
+      message: "Event not found.",
+      log: { level: "warn" },
+      params: { id },
+    });
   }
 
+  logger.debug({ id }, "Event retrieved successfully");
+
+  span?.setStatus({ code: SpanStatusCode.OK });
   return res.status(StatusCodes.OK).json(event);
 };
 
@@ -87,8 +95,6 @@ export const eventCreateHandler: RequestHandler<
 
   const created = await createEvent(newEvent);
 
-  logger.info(created, "Event created");
-
   return res.status(StatusCodes.CREATED).json(created);
 };
 
@@ -102,10 +108,8 @@ export const eventCreateVotesHandler: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
 
-  const newVotes = await voteEvent(Number(id), req.body);
+  await voteEvent(Number(id), req.body);
   const updatedEvent = await getEventById(Number(id));
-
-  logger.info(newVotes, "Votes created");
 
   return res.status(StatusCodes.OK).json(updatedEvent);
 };
@@ -122,11 +126,11 @@ export const eventGetResultsHandler: RequestHandler<
   const results = await getEventResults(Number(id));
 
   if (!results) {
-    logger.warn(`Event ${id} not found`);
-
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: `Event ${id} not found` });
+    throw ApiError.notFound({
+      message: "Event results not found.",
+      log: { level: "warn" },
+      params: { id },
+    });
   }
 
   return res.status(StatusCodes.OK).json(results);

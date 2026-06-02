@@ -10,8 +10,11 @@ A Node.js template for building RESTful APIs. Includes:
 - Docker
 - PostgreSQL
 - An example RESTful API
+- Otel tracing support
 
 The project structures follows the [Tao of Node](https://alexkondov.com/tao-of-node/), which I've found very useful during my career.
+
+Logging follows the philosophy from [this](https://loggingsucks.com/) blog.
 
 ## Quickstart
 

@@ -2,7 +2,12 @@ import express, { type Express } from "express";
 import helmet from "helmet";
 import cors from "cors";
 import newEventRouter from "./event/event-handlers.ts";
-import { errorHandler } from "./middleware.ts";
+import newHealthRouter from "./health/health-handlers.ts";
+import { errorHandler } from "./middleware/error-handler.ts";
+import { rateLimiter } from "./middleware/rate-limiter.ts";
+import { wideEventHandler } from "./middleware/wide-event.ts";
+import { httpLogger } from "./logger.ts";
+import { traceHandler } from "./middleware/trace-handler.ts";
 
 /**
  * Creates the Express app with all the necessary middleware and routes.
@@ -16,10 +21,24 @@ const createApp = (): Express => {
   app.use(helmet());
   // Setup cors here if you need it in the future.
   app.use(cors());
-  app.use(express.json());
+  // Limit the size of incoming JSON and URL-encoded bodies to 10mb.
+  // Defaults are a bit smaller (100kb), which is fine too.
+  // This is purely an example.
+  app.use(express.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+  // Structured request logging (pino-http).
+  // Http logging disabled by default due to wide events philosophy.
+  app.use(httpLogger);
+  // Apply rate limiting to all incoming requests.
+  app.use(rateLimiter);
+  // Centralized logging based on wide events philosophy.
+  // Must be registered before routes so req.event is initialized for every request.
+  app.use(wideEventHandler);
+  // Add tracing to all incoming requests.
+  app.use(traceHandler);
 
+  app.use(`${prefix}/health`, newHealthRouter());
   app.use(`${prefix}/event`, newEventRouter());
-
   // Centralized error handling after routes.
   // This will catch any errors thrown by route handlers.
   // Except inside async callbacks.
