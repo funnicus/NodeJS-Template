@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file.
 - Update to pnpm 11
 - Add metrics support and endpoints for prometheus
 
+### 🐛 Bug Fixes
+
+- Tracing route path after request finishes
+
 ### ⚙️ Miscellaneous Tasks
 
 - Better database error handling
