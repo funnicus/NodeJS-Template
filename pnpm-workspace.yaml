@@ -2,7 +2,7 @@
 # Source: https://github.com/lirantal/npm-security-best-practices
 
 # SECURITY: block packages newer than 1 day (1440 minutes, pnpm 11 default)
-# See the recent axios case to see why this is a good idea.
+# See the recent supply chain attacks to see why this is a good idea.
 minimumReleaseAge: 1440
 
 # SECURITY: reject a version whose publishing trust signals regressed

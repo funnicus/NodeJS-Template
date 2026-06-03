@@ -6,7 +6,6 @@ import newHealthRouter from "./health/health-handlers.ts";
 import { errorHandler } from "./middleware/error-handler.ts";
 import { rateLimiter } from "./middleware/rate-limiter.ts";
 import { wideEventHandler } from "./middleware/wide-event.ts";
-import { httpLogger } from "./logger.ts";
 import { traceHandler } from "./middleware/trace-handler.ts";
 import { metricsCollectorHandler } from "./middleware/metrics-handler.ts";
 import { metricsHandler } from "./metrics.ts";
@@ -28,9 +27,6 @@ const createApp = (): Express => {
   // This is purely an example.
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-  // Structured request logging (pino-http).
-  // Http logging disabled by default due to wide events philosophy.
-  app.use(httpLogger);
   // Apply rate limiting to all incoming requests.
   app.use(rateLimiter);
   // Centralized logging based on wide events philosophy.
