@@ -8,6 +8,8 @@ import { rateLimiter } from "./middleware/rate-limiter.ts";
 import { wideEventHandler } from "./middleware/wide-event.ts";
 import { httpLogger } from "./logger.ts";
 import { traceHandler } from "./middleware/trace-handler.ts";
+import { metricsCollectorHandler } from "./middleware/metrics-handler.ts";
+import { metricsHandler } from "./metrics.ts";
 
 /**
  * Creates the Express app with all the necessary middleware and routes.
@@ -36,7 +38,9 @@ const createApp = (): Express => {
   app.use(wideEventHandler);
   // Add tracing to all incoming requests.
   app.use(traceHandler);
+  app.use(metricsCollectorHandler);
 
+  app.get(`${prefix}/metrics`, metricsHandler);
   app.use(`${prefix}/health`, newHealthRouter());
   app.use(`${prefix}/event`, newEventRouter());
   // Centralized error handling after routes.
