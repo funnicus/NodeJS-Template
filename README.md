@@ -18,6 +18,8 @@ The project structures follows the [Tao of Node](https://alexkondov.com/tao-of-n
 
 Logging follows the philosophy from [this](https://loggingsucks.com/) blog.
 
+To further develop this template, I'd suggest [semicolony.dev](https://semicolony.dev/) for ideas and inspiration.
+
 ## Quickstart
 
 You need to have

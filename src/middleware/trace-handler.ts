@@ -30,16 +30,16 @@ export const traceHandler: RequestHandler = (req, res, next) => {
   span.setAttribute("req.id", req.event.request_id);
   span.setAttribute("req.method", req.method);
 
-  const routePath = (req.route as ExpressRoute | undefined)?.path;
-  if (typeof routePath === "string") {
-    span.setAttribute("http.route", routePath);
-  }
-
   req.event.trace_id = spanContext.traceId;
   req.event.span_id = spanContext.spanId;
 
   res.on("finish", () => {
     span.setAttribute("http.status_code", res.statusCode);
+
+    const routePath = (req.route as ExpressRoute | undefined)?.path;
+    if (typeof routePath === "string") {
+      span.setAttribute("http.route", routePath);
+    }
 
     if (res.statusCode >= 500) {
       span.setStatus({ code: SpanStatusCode.ERROR });
